@@ -47,3 +47,5 @@ class ModificarResidente (VentanaInvitado):
     def __init__(self, ppal=None):
         super().__init__(ppal)
         loadUi("interfaces/vista_invtado.ui",self)
+        
+#prueba
