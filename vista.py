@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QMessageBox
+from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QMessageBox, QLineEdit
 from PyQt5.uic import loadUi
 from PyQt5.QtGui import QIntValidator, QRegExpValidator
 from PyQt5.QtCore import Qt,QRegExp
@@ -20,8 +20,12 @@ class VentanaPrincipal(QMainWindow):
 
     
     def ingreso(self):
+        self.edit_password = QLineEdit(self)
         user = self.usuario.text()
         password = self.clave.text()
+        # Configurar la entrada de contraseña para ocultar caracteres
+        self.edit_password.setEchoMode(QLineEdit.clave.text())
+        
         #esta informacion la debemos pasar al controlador
         resultado = self.__controlador.verificar_usuario(user,password)
         #se crea la ventana de resultado
@@ -71,4 +75,3 @@ class ModificarResidente (VentanaInvitado):
     def __init__(self, ppal=None):
         super().__init__(ppal)
         loadUi("interfaces/vista_invtado.ui",self)
-#n= alguna cosita
