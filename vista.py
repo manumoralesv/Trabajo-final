@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QMessageBox
+from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QMessageBox, QLineEdit
 from PyQt5.uic import loadUi
 from PyQt5.QtGui import QIntValidator, QRegExpValidator
 from PyQt5.QtCore import Qt,QRegExp
@@ -7,12 +7,11 @@ import sys
 class VentanaPrincipal(QMainWindow):
     def __init__(self, ppal =None):
         super().__init__()
-        self.__listaMedActual = {}
         loadUi('interfaces/ventana_principal.ui',self)
         self.setup()
     
     def setup(self):
-        #se programa la senal para el boton
+        #se programa la señal para el boton
         self.boton_ingreso.clicked.connect(self.ingreso)
     
     def asignarControlador(self,control):
