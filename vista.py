@@ -10,6 +10,27 @@ class VentanaPrincipal(QMainWindow):
         self.__listaMedActual = {}
         loadUi('interfaces/ventana_principal.ui',self)
         self.setup()
+    
+    def setup(self):
+        #se programa la senal para el boton
+        self.boton_ingreso.clicked.connect(self.ingreso)
+    
+    def asignarControlador(self,control):
+        self.__controlador = control
+
+    
+    def ingreso(self):
+        user = self.usuario.text()
+        password = self.clave.text()
+        #esta informacion la debemos pasar al controlador
+        resultado = self.__controlador.verificar_usuario(user,password)
+        #se crea la ventana de resultado
+        msg = QMessageBox(self)
+        msg.setIcon(QMessageBox.Information)
+        msg.setWindowTitle("Resultado")
+        if resultado == False:
+            msg.setText("Usuario o contraseña no validos")
+            msg.show()
 
 
 class VentanaAdmin (QDialog):

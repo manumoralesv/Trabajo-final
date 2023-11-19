@@ -40,7 +40,7 @@
      <string>Contraseña</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="ingreso">
+   <widget class="QPushButton" name="boton_ingreso">
     <property name="geometry">
      <rect>
       <x>240</x>
