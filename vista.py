@@ -28,11 +28,14 @@ class VentanaPrincipal(QMainWindow):
         msg = QMessageBox(self)
         msg.setIcon(QMessageBox.Information)
         msg.setWindowTitle("Resultado")
-        if resultado == False:
+        if resultado == True:
+            ventana_ingreso=VentanaAdmin(self)
+            self.hide()
+            ventana_ingreso.show()
+        else:
             msg.setText("Usuario o contraseña no validos")
             msg.show()
-
-
+        
 class VentanaAdmin (QDialog):
     def __init__(self,ppal=None):
         super().__init__(ppal)
