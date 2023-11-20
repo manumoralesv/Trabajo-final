@@ -20,8 +20,12 @@ class VentanaPrincipal(QMainWindow):
 
     
     def ingreso(self):
+        self.edit_password = QLineEdit(self)
         user = self.usuario.text()
         password = self.clave.text()
+        # Configurar la entrada de contraseña para ocultar caracteres
+        self.edit_password.setEchoMode(QLineEdit.clave.text())
+        
         #esta informacion la debemos pasar al controlador
         resultado = self.__controlador.verificar_usuario(user,password)
         #se crea la ventana de resultado
