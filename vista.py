@@ -13,6 +13,7 @@ class VentanaPrincipal(QMainWindow):
     def setup(self):
         #se programa la señal para el boton
         self.boton_ingreso.clicked.connect(self.ingreso)
+        self.boton_invitado.clicked.connect(self.ingreso_inv)
     
     def asignarControlador(self,control):
         self.__controlador = control
@@ -34,6 +35,11 @@ class VentanaPrincipal(QMainWindow):
         else:
             msg.setText("Usuario o contraseña no validos")
             msg.show()
+            
+    def ingreso_inv(self):
+        ventana_ingreso=VentanaInvitado(self)
+        self.hide()
+        ventana_ingreso.show()
         
 class VentanaAdmin (QDialog):
     def __init__(self,ppal=None):

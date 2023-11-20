@@ -58,7 +58,7 @@
      <string>Ingresar</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="invitado">
+   <widget class="QPushButton" name="boton_invitado">
     <property name="geometry">
      <rect>
       <x>220</x>
