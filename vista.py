@@ -7,13 +7,13 @@ import sys
 class VentanaPrincipal(QMainWindow):
     def __init__(self, ppal =None):
         super().__init__()
-        self.__listaMedActual = {}
         loadUi('interfaces/ventana_principal.ui',self)
         self.setup()
     
     def setup(self):
-        #se programa la senal para el boton
+        #se programa la señal para el boton
         self.boton_ingreso.clicked.connect(self.ingreso)
+        self.boton_invitado.clicked.connect(self.ingreso_inv)
     
     def asignarControlador(self,control):
         self.__controlador = control
@@ -24,7 +24,7 @@ class VentanaPrincipal(QMainWindow):
         user = self.usuario.text()
         password = self.clave.text()
         # Configurar la entrada de contraseña para ocultar caracteres
-        self.edit_password.setEchoMode(QLineEdit.clave.text())
+        #self.edit_password.setEchoMode(QLineEdit.clave.text())
         
         #esta informacion la debemos pasar al controlador
         resultado = self.__controlador.verificar_usuario(user,password)
@@ -39,6 +39,11 @@ class VentanaPrincipal(QMainWindow):
         else:
             msg.setText("Usuario o contraseña no validos")
             msg.show()
+            
+    def ingreso_inv(self):
+        ventana_ingreso=VentanaInvitado(self)
+        self.hide()
+        ventana_ingreso.show()
         
 class VentanaAdmin (QDialog):
     def __init__(self,ppal=None):
@@ -54,6 +59,15 @@ class AgregarResidente (VentanaAdmin):
     def __init__(self, ppal=None):
         super().__init__(ppal)
         loadUi("interfaces/agregar_residente.ui",self)
+        self.__ventanaPadre = ppal
+        self.setup()
+
+    def enviarInfo(self):
+        nombre=self.mod_name.text()
+        cedula=self.mod_cedula.text()
+        edad= self.mod_age.text()
+        self.__ventanaPadre.recibir_infoRec(nombre,cedula,edad)
+        self.__ventanaPadre.show()
 
 class ModificarResidente (VentanaAdmin):
     def __init__(self, ppal=None):
