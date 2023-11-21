@@ -40,7 +40,7 @@ class Residente:
         self.__cedula=c 
     
     def AsignarEdad(self,e):
-        self.__cedula=e
+        self.__edad=e
     #metodo para asignar todos las visita
   
     #def AsignarVisita(self,m):
@@ -51,3 +51,6 @@ class Residente:
 
     def VerCedula(self):
         return self.__cedula 
+    
+    def VerEdad(self):
+        return self.__edad 
