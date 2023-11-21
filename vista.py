@@ -19,7 +19,6 @@ class VentanaPrincipal(QMainWindow):
         #Se asigna el controlador
         self.__controlador = control
 
-    
     def ingreso(self):
         #Función que nos servirá para llevar a cabo el funcionamiento del botón de ingreso
         self.edit_password = QLineEdit(self)
@@ -95,10 +94,14 @@ class ModificarResidente(VentanaAdmin):
     def __init__(self, ppal=None):
         super().__init__(ppal)
         loadUi("interfaces/modificar_residente.ui",self)
-        self.eleccion()
+        self.menu2()
+        
+    def menu2(self):
+        self.boton_modificar.accepted.connect(self.eleccion)
+        self.boton_modificar.rejected.connect(lambda:self.close())
     
     def eleccion(self):
-        item2 = self.menu_admin.currentText()
+        item2 = self.menu_modificacion.currentText()
         if item2 == 'Residente':
             ventana=DatosResidente(self)
             self.hide()
