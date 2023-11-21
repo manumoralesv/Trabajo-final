@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QMessageBox, QLineEdit
+from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QMessageBox, QLineEdit, QComboBox
 from PyQt5.uic import loadUi
 from PyQt5.QtGui import QIntValidator, QRegExpValidator
 from PyQt5.QtCore import Qt,QRegExp
@@ -34,6 +34,7 @@ class VentanaPrincipal(QMainWindow):
             ventana_ingreso=VentanaAdmin(self)
             self.hide()
             ventana_ingreso.show()
+
         else:
             msg.setText("Usuario o contraseña no validos")
             msg.show()
@@ -47,7 +48,31 @@ class VentanaAdmin (QDialog):
     def __init__(self,ppal=None):
         super().__init__(ppal)
         loadUi("interfaces/menu_admin.ui",self)
+        self.menu()
         
+    def menu(self):
+        self.boton_menuadmin.accepted.connect(self.opcion)
+        self.boton_menuadmin.rejected.connect(lambda:self.close())
+    
+    def opcion(self):
+        item = self.menu_admin.currentText()
+        if item == 'Ver Residentes':
+            ventana_see=VistaResidente(self)
+            self.hide()
+            ventana_see.show() 
+        elif item == 'Agregar Residente':
+            ventana_agg=AgregarResidente(self)
+            self.hide()
+            ventana_agg.show()
+        elif item == 'Actualizar Datos':
+            ventana_mod=ModificarResidente(self)
+            self.hide()
+            ventana_mod.show()
+        elif item == 'Eliminar Residente':
+            ventana_del=EliminarResidente(self)
+            self.hide()
+            ventana_del.show()
+            
 class VistaResidente (VentanaAdmin):
     def __init__(self, ppal=None):
         super().__init__(ppal)
@@ -66,15 +91,14 @@ class ModificarResidente (VentanaAdmin):
 class EliminarResidente (VentanaAdmin):
     def __init__(self, ppal=None):
         super().__init__(ppal)
-        loadUi("interfaces/eliminar_residente.ui",self)
-        
+        loadUi("interfaces/eliminar_residente.ui",self)     
         
 class VentanaInvitado (QDialog):
     def __init__(self,ppal=None):
         super().__init__(ppal)
         loadUi("interfaces/menu_invitado.ui",self)
         
-class ModificarResidente (VentanaInvitado):
+class VistaInvitado (VentanaInvitado):
     def __init__(self, ppal=None):
         super().__init__(ppal)
-        loadUi("interfaces/vista_invtado.ui",self)
+        loadUi("interfaces/vista_invitado.ui",self)
