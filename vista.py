@@ -116,7 +116,7 @@ class VentanaInvitado (QDialog):
         self.boton_invitado.clicked.connect(lambda:self.close())
     
     def buscar_Residente(self,cedula):
-        resultado=self.__coordinador.validarRec(cedula,self.__listaResidentes)
+        resultado=self.__coordinador.buscarResidente(cedula,self.__listaResidentes)
         if resultado:
             mensaje = "Paciente No existe, intente de nuevo"
         else:

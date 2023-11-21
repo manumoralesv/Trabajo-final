@@ -13,7 +13,7 @@ class Coordinador(object):
     def verificar_usuario(self, u, p):
         return self.__sistema.validarAdmin(u,p)
     
-    def buscar_Residente(self,cedula):
+    def buscarResidente(self,cedula):
         resultado = self.__sistema.validarRec(cedula)
         if resultado:
             return False
