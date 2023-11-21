@@ -1,17 +1,9 @@
+from datetime import *
 class Sistema(object):
     def __init__(self):
         self.__usuarios = {}
-        self.__listaResidentes = {}
         #se crea un usuario inicial para arrancar el sistema
         self.__usuarios['Admin'] = 'admin951'
-    
-    def agregarResidente(self,nombre,cedula,edad):
-        p=Residente()
-        p.AsignarNombre(nombre)
-        p.AsignarCedula(cedula)
-        p.AsignarEdad(edad)
-        #p.AsignarVisita(visita)
-        self.__listaResidentes[cedula] = p
     
     def validarRec (self, cedula):
         return cedula not in self.__listaResidentes
@@ -28,29 +20,30 @@ class Sistema(object):
 
 class Residente:
     def __init__(self):
-        self.__nombre="" 
-        self.__cedula=0
-        self.__edad=0  
-        #self.__lista_visita = {} 
-
-    def AsignarNombre(self,n):
-        self.__nombre=n 
-
-    def AsignarCedula(self,c):
-        self.__cedula=c 
+        self.db = {}
+        self.data = {}
+        self.visitas = {}
+        
     
-    def AsignarEdad(self,e):
-        self.__edad=e
-    #metodo para asignar todos las visita
-  
-    #def AsignarVisita(self,m):
-        #self.__lista_visita = m 
-
-    def VerNombre(self):
-        return self.__nombre 
-
-    def VerCedula(self):
-        return self.__cedula 
+    def agregarVisita(self,day,month,year,number,entry,output):
+        date = 1
+        self.visitas['Fecha'] = date
+        self.visitas['Número de visitantes'] = number
+        self.visitas['Hora de entrada'] = entry
+        self.visitas['Hora de salida'] = output
     
-    def VerEdad(self):
-        return self.__edad 
+    def agregarDatos(self,name,doc,age,visit):
+        self.__name= name
+        self.__doc= doc
+        self.__age= age
+        self.__visit = visit
+        
+        self.data['Nombre'] = self.__name
+        self.data['Edad'] = self.__age
+        self.data['Visitas'] = self.__visit
+    
+    def agregarResidente(self):
+        self.db[self.__doc] = self.data
+
+    def VerDatos(self):
+        pass
