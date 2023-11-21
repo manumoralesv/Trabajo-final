@@ -13,14 +13,13 @@ class Coordinador(object):
     def verificar_usuario(self, u, p):
         return self.__sistema.validarAdmin(u,p)
     
-    def recibirInfoRec(self,nombre,cedula,edad):
+    def buscarResidente(self,cedula):
         resultado = self.__sistema.validarRec(cedula)
         if resultado:
-            self.__sistema.agregarResidente(nombre,cedula,edad)
-            return True
-        else:
             return False
-
+        else:
+            #self.__sistema.verInfoResidente(nombre,cedula,edad)
+            return True
 class Principal(object):
     #Se crea el init el cual nos hará las conexiones entre vista, modelo y controlador
     def __init__(self):

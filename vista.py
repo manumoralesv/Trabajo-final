@@ -136,7 +136,25 @@ class VentanaInvitado (QDialog):
     def __init__(self,ppal=None):
         super().__init__(ppal)
         loadUi("interfaces/menu_invitado.ui",self)
-        
+        self.setup()
+    
+    def setup(self):
+        #se programa la señal para el boton
+        self.boton_invitado.clicked.connect(self.buscar_Residente)
+        self.boton_invitado.clicked.connect(lambda:self.close())
+    
+    def buscar_Residente(self,cedula):
+        resultado=self.__coordinador.buscarResidente(cedula,self.__listaResidentes)
+        if resultado:
+            mensaje = "Paciente No existe, intente de nuevo"
+        else:
+            mensaje = "Paciente existe!!!!"
+
+        msj= QMessageBox(self)
+        msj.setIcon(QMessageBox.Warning) #Information
+        msj.setText(mensaje)
+        msj.show()
+                
 class VistaInvitado (VentanaInvitado):
     def __init__(self, ppal=None):
         super().__init__(ppal)
