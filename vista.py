@@ -16,16 +16,14 @@ class VentanaPrincipal(QMainWindow):
         self.boton_invitado.clicked.connect(self.ingreso_inv)
     
     def asignarControlador(self,control):
+        #Se asigna el controlador
         self.__controlador = control
 
-    
     def ingreso(self):
+        #Función que nos servirá para llevar a cabo el funcionamiento del botón de ingreso
         self.edit_password = QLineEdit(self)
         user = self.usuario.text()
         password = self.clave.text()
-        # Configurar la entrada de contraseña para ocultar caracteres
-        #self.edit_password.setEchoMode(QLineEdit.clave.text())
-        
         #esta informacion la debemos pasar al controlador
         resultado = self.__controlador.verificar_usuario(user,password)
         #se crea la ventana de resultado
@@ -36,7 +34,6 @@ class VentanaPrincipal(QMainWindow):
             ventana_ingreso=VentanaAdmin(self)
             self.hide()
             ventana_ingreso.show()
-
         else:
             msg.setText("Usuario o contraseña no validos")
             msg.show()
@@ -59,22 +56,22 @@ class VentanaAdmin (QDialog):
     def opcion(self):
         item = self.menu_admin.currentText()
         if item == 'Ver Residentes':
-            ventana_see=VistaResidente(self)
+            ventana=VistaResidente(self)
             self.hide()
-            ventana_see.show() 
+            ventana.show() 
         elif item == 'Agregar Residente':
-            ventana_agg=AgregarResidente(self)
+            ventana=AgregarResidente(self)
             self.hide()
-            ventana_agg.show()
+            ventana.show()
         elif item == 'Actualizar Datos':
-            ventana_mod=ModificarResidente(self)
+            ventana= ModificarResidente(self)
             self.hide()
-            ventana_mod.show()
+            ventana.show()
         elif item == 'Eliminar Residente':
-            ventana_del=EliminarResidente(self)
+            ventana=EliminarResidente(self)
             self.hide()
-            ventana_del.show()
-            
+            ventana.show()
+
 class VistaResidente (VentanaAdmin):
     def __init__(self, ppal=None):
         super().__init__(ppal)
@@ -85,7 +82,6 @@ class AgregarResidente (VentanaAdmin):
         super().__init__(ppal)
         loadUi("interfaces/agregar_residente.ui",self)
         self.__ventanaPadre = ppal
-        self.setup()
 
     def enviarInfo(self):
         nombre=self.mod_name.text()
@@ -94,10 +90,45 @@ class AgregarResidente (VentanaAdmin):
         self.__ventanaPadre.recibir_infoRec(nombre,cedula,edad)
         self.__ventanaPadre.show()
 
-class ModificarResidente (VentanaAdmin):
+class ModificarResidente(VentanaAdmin):
     def __init__(self, ppal=None):
         super().__init__(ppal)
         loadUi("interfaces/modificar_residente.ui",self)
+        self.menu2()
+        
+    def menu2(self):
+        self.boton_modificar.accepted.connect(self.eleccion)
+        self.boton_modificar.rejected.connect(lambda:self.close())
+    
+    def eleccion(self):
+        item2 = self.menu_modificacion.currentText()
+        if item2 == 'Residente':
+            ventana=DatosResidente(self)
+            self.hide()
+            ventana.show() 
+        elif item2 == 'Contacto 1':
+            ventana=DatosContacto1(self)
+            self.hide()
+            ventana.show()
+        elif item2 == 'Contacto 2':
+            ventana=DatosContacto2(self)
+            self.hide()
+            ventana.show()
+            
+class DatosResidente(ModificarResidente):
+    def __init__(self, ppal=None):
+        super().__init__(ppal)
+        loadUi("interfaces/mod_residente.ui",self)
+
+class DatosContacto1(ModificarResidente):
+    def __init__(self, ppal=None):
+        super().__init__(ppal)
+        loadUi("interfaces/mod_contacto1.ui",self)
+
+class DatosContacto2(ModificarResidente):
+    def __init__(self, ppal=None):
+        super().__init__(ppal)
+        loadUi("interfaces/mod_contacto2.ui",self)
 
 class EliminarResidente (VentanaAdmin):
     def __init__(self, ppal=None):
