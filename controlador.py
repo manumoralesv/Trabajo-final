@@ -15,7 +15,7 @@ class Coordinador(object):
     
     def buscarResidente(self,cedula):
         resultado = self.__sistema.validarRec(cedula)
-        if resultado:
+        if resultado==True:
             return False
         else:
             #self.__sistema.verInfoResidente(nombre,cedula,edad)
