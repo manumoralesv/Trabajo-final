@@ -143,12 +143,15 @@ class VentanaInvitado (QDialog):
     
     def setup(self):
         #se programa la señal para el boton
-        self.boton_invitado.clicked.connect(self.buscar_Residente)
-        self.boton_invitado.clicked.connect(lambda:self.close())
+        self.boton_invitado.accepted.connect(self.buscar_Residente)
+        self.boton_invitado.rejected.connect(lambda:self.close())
     
-    def buscar_Residente(self,cedula):
-        cedula = self.busc_invitado.text()
-        resultado=self.__coordinador.buscarResidente(cedula,self.__listaResidentes)
+    def asignarControlador(self,control):
+        self.__coordinador = control 
+    
+    def buscar_Residente(self):
+        self.cedula = self.busc_invitado.text()
+        resultado=self.__coordinador.buscarResidente(self.cedula,self.__listaResidentes)
         if resultado== False:
             mensaje = "Paciente No existe, intente de nuevo"
         else:

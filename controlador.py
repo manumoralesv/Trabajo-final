@@ -15,11 +15,7 @@ class Coordinador(object):
     
     def buscarResidente(self,cedula):
         resultado = self.__sistema.validarRec(cedula)
-        if resultado==True:
-            return False
-        else:
-            #self.__sistema.verInfoResidente(nombre,cedula,edad)
-            return True
+        
 class Principal(object):
     #Se crea el init el cual nos hará las conexiones entre vista, modelo y controlador
     def __init__(self):
