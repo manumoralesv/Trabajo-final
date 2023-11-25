@@ -155,7 +155,10 @@ class VentanaInvitado (QDialog):
         if resultado== False:
             mensaje = "Paciente No existe, intente de nuevo"
         else:
-            mensaje = "Paciente existe!!!!"
+            # Al encontrar el residente, se procede a abrir la ventana donde se visualiza la informacion.
+            ventana_In = VistaInvitado(self)
+            self.hide()
+            ventana_In.show()
 
         msj= QMessageBox(self)
         msj.setIcon(QMessageBox.Warning) #Information
@@ -166,3 +169,24 @@ class VistaInvitado (QDialog):
     def __init__(self, ppal=None):
         super().__init__(ppal)
         loadUi("interfaces/vista_invitado.ui",self)
+        self.setup()
+    
+    def setup(self):
+        #se programa la señal para el boton
+        self.botonvista_invitado.clicked.connect(lambda:self.close())
+        
+    def visual_DatosResidente(self,name,doc,age,visit,salud_mental):
+        #Sacamos la información y creamos el label
+        self.__name= name
+        self.__doc= doc
+        self.__age= age
+        self.__visit = visit
+        self.__salud_mental= salud_mental
+        self.info_residente.setText(f'''
+                                   Nombre: {name}
+                                   Id: {doc}
+                                   Edad: {age}
+                                   Visitas: {visit}
+                                   Descripción de la salud mental: {salud_mental}''')
+    
+    
