@@ -1,4 +1,4 @@
-from datetime import *
+from datetime import date
 class Sistema(object):
     def __init__(self):
         self.__usuarios = {}
@@ -26,8 +26,8 @@ class Residente:
         
     
     def agregarVisita(self,day,month,year,number,entry,output):
-        date = 1
-        self.visitas['Fecha'] = date
+        d = date(year, month, day).isoformat()
+        self.visitas['Fecha'] = d
         self.visitas['Número de visitantes'] = number
         self.visitas['Hora de entrada'] = entry
         self.visitas['Hora de salida'] = output

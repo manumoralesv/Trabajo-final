@@ -34,14 +34,15 @@ class VentanaPrincipal(QMainWindow):
             ventana_ingreso=VentanaAdmin(self)
             self.hide()
             ventana_ingreso.show()
+            resultado = False 
         else:
             msg.setText("Usuario o contraseña no validos")
             msg.show()
             
     def ingreso_inv(self):
-        ventana_ingreso=VentanaInvitado(self)
+        ventana_ingreso2=VentanaInvitado(self)
         self.hide()
-        ventana_ingreso.show()
+        ventana_ingreso2.show()
         
 class VentanaAdmin (QDialog):
     def __init__(self,ppal=None):
@@ -72,12 +73,12 @@ class VentanaAdmin (QDialog):
             self.hide()
             ventana.show()
 
-class VistaResidente (VentanaAdmin):
+class VistaResidente (QDialog):
     def __init__(self, ppal=None):
         super().__init__(ppal)
         loadUi("interfaces/vista_admin.ui",self)
 
-class AgregarResidente (VentanaAdmin):
+class AgregarResidente (QDialog):
     def __init__(self, ppal=None):
         super().__init__(ppal)
         loadUi("interfaces/agregar_residente.ui",self)
@@ -90,7 +91,7 @@ class AgregarResidente (VentanaAdmin):
         self.__ventanaPadre.recibir_infoRec(nombre,cedula,edad)
         self.__ventanaPadre.show()
 
-class ModificarResidente(VentanaAdmin):
+class ModificarResidente(QDialog):
     def __init__(self, ppal=None):
         super().__init__(ppal)
         loadUi("interfaces/modificar_residente.ui",self)
@@ -101,6 +102,7 @@ class ModificarResidente(VentanaAdmin):
         self.boton_modificar.rejected.connect(lambda:self.close())
     
     def eleccion(self):
+        
         item2 = self.menu_modificacion.currentText()
         if item2 == 'Residente':
             ventana=DatosResidente(self)
@@ -115,22 +117,22 @@ class ModificarResidente(VentanaAdmin):
             self.hide()
             ventana.show()
             
-class DatosResidente(ModificarResidente):
+class DatosResidente(QDialog):
     def __init__(self, ppal=None):
         super().__init__(ppal)
         loadUi("interfaces/mod_residente.ui",self)
 
-class DatosContacto1(ModificarResidente):
+class DatosContacto1(QDialog):
     def __init__(self, ppal=None):
         super().__init__(ppal)
         loadUi("interfaces/mod_contacto1.ui",self)
 
-class DatosContacto2(ModificarResidente):
+class DatosContacto2(QDialog):
     def __init__(self, ppal=None):
         super().__init__(ppal)
         loadUi("interfaces/mod_contacto2.ui",self)
 
-class EliminarResidente (VentanaAdmin):
+class EliminarResidente (QDialog):
     def __init__(self, ppal=None):
         super().__init__(ppal)
         loadUi("interfaces/eliminar_residente.ui",self)     
@@ -158,7 +160,7 @@ class VentanaInvitado (QDialog):
         msj.setText(mensaje)
         msj.show()
                 
-class VistaInvitado (VentanaInvitado):
+class VistaInvitado (QDialog):
     def __init__(self, ppal=None):
         super().__init__(ppal)
         loadUi("interfaces/vista_invitado.ui",self)
