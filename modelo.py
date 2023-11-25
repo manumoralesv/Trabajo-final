@@ -2,11 +2,16 @@ from datetime import date
 class Sistema(object):
     def __init__(self):
         self.__usuarios = {}
+        self.__listaResidentes = {}
+        self.__listaResidentes['12345'] = 'Mario Prueba'
         #se crea un usuario inicial para arrancar el sistema
         self.__usuarios['Admin'] = 'admin951'
     
-    def validarRec (self, cedula):
-        return cedula not in self.__listaResidentes
+    def validarRec(self, cedula):
+        if cedula not in self.__listaResidentes:
+            return False
+        else:
+            return True
     
     def validarAdmin(self, u, p):
         try:
