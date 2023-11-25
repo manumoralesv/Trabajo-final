@@ -1,7 +1,5 @@
 from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QMessageBox, QLineEdit, QComboBox
 from PyQt5.uic import loadUi
-from PyQt5.QtGui import QIntValidator, QRegExpValidator
-from PyQt5.QtCore import Qt,QRegExp
 import sys 
 
 class VentanaPrincipal(QMainWindow):

@@ -29,7 +29,6 @@ class Residente:
         self.data = {}
         self.visitas = {}
         
-    
     def agregarVisita(self,day,month,year,number,entry,output):
         d = date(year, month, day).isoformat()
         self.visitas['Fecha'] = d
