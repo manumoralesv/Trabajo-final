@@ -16,6 +16,9 @@ class VentanaPrincipal(QMainWindow):
     def asignarControlador(self,control):
         #Se asigna el controlador
         self.__controlador = control
+    
+    def busc_res(self,a):
+        resultado =self.__controlador.recibirInfoRes(a)
 
     def ingreso(self):
         #Función que nos servirá para llevar a cabo el funcionamiento del botón de ingreso
@@ -139,6 +142,7 @@ class VentanaInvitado (QDialog):
     def __init__(self,ppal=None):
         super().__init__(ppal)
         loadUi("interfaces/menu_invitado.ui",self)
+        self.__ventanaPadre = ppal
         self.setup()
     
     def setup(self):
@@ -146,12 +150,9 @@ class VentanaInvitado (QDialog):
         self.boton_invitado.accepted.connect(self.buscar_Residente)
         self.boton_invitado.rejected.connect(lambda:self.close())
     
-    def asignarControlador(self,control):
-        self.__coordinador = control 
-    
     def buscar_Residente(self):
         self.cedula = self.busc_invitado.text()
-        resultado=self.__coordinador.buscarResidente(self.cedula,self.__listaResidentes)
+        resultado =self.__ventanaPadre.busc_res(self.cedula)
         if resultado== False:
             mensaje = "Paciente No existe, intente de nuevo"
         else:

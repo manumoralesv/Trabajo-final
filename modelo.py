@@ -3,7 +3,7 @@ class Sistema(object):
     def __init__(self):
         self.__usuarios = {}
         self.__listaResidentes = {}
-        self.__listaResidentes['12345'] = 'Mario Prueba'
+        self.__listaResidentes['12345'] = {'Mario Prueba'}
         #se crea un usuario inicial para arrancar el sistema
         self.__usuarios['Admin'] = 'admin951'
     
@@ -28,19 +28,12 @@ class Residente:
         self.db = {}
         self.data = {}
         self.visitas = {}
-        
-    def agregarVisita(self,day,month,year,number,entry,output):
-        d = date(year, month, day).isoformat()
-        self.visitas['Fecha'] = d
-        self.visitas['Número de visitantes'] = number
-        self.visitas['Hora de entrada'] = entry
-        self.visitas['Hora de salida'] = output
     
-    def agregarDatos(self,name,doc,age,visit):
+    def agregarDatos(self,name,doc,age,status):
         self.__name= name
         self.__doc= doc
         self.__age= age
-        self.__visit = visit
+        self.estado = status
         
         self.data['Nombre'] = self.__name
         self.data['Edad'] = self.__age
