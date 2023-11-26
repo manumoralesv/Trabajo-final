@@ -16,12 +16,34 @@ class Sistema(object):
                 return False
         except: #Se retorna un False si el usuario no es el mismo que la clave del diccionario
             return False
+    
+    #Asignación de las variables de la semana
+    def AsignarLunes(self,l):
+        self.__lunes=l
+        return self.__lunes 
+    def AsignarMartes(self,m):
+        self.__martes=m
+        return self.__martes
+    def AsignarMiercoles(self,w):
+        self.__miercoles=w
+        return self.__miercoles 
+    def AsignarJueves(self,j):
+        self.__jueves=j
+        return self.__jueves
+    def AsignarViernes(self,v):
+        self.__viernes=v
+        return self.__viernes 
+    def AsignarSabado(self,s):
+        self.__sabado=s
+        return self.__sabado
+    def AsignarDomingo(self,d):
+        self.__domingo=d
+        return self.__domingo
 
 class Residente:
     def __init__(self):
         self.__nombre="" 
         self.__cedula=''
-        self.__status = {} 
         
     def AsignarNombre(self,n):
         self.__nombre=n
@@ -38,38 +60,25 @@ class Residente:
     def AsignarFechanacimiento(self,d):
         self.__date=d
         return self.__date
-
-    def AsignarStatus(self,doc,fisico,mental):
-        self.__status = {}
-        try:
-            if self.__listaResidentes[doc]:
-                self.__fisico = fisico
-                self.__mental = mental
-                
-                self.__status['Físico'] = self.__fisico
-                self.__status['Mental'] = self.__mental
-                return self.__status
-        except:
-            msg = QMessageBox(self)
-            msg.setIcon(QMessageBox.Information)
-            msg.setWindowTitle("Resultado")
-            msg.setText("El documento ingresado no se encuentra en la base de datos")
-            msg.show()
-        return self.__status
+    
+    def AsignarTelefono(self,t):
+        self.__tel=t
+        return self.__tel
 
 
 class BaseDatos:
     def __init__(self):
         self.__archivo_residentes = "residentes.json"
+        self.__archivo_horarios = "horario.json"
         self.cargar_residentes()
 
     def cargar_residentes(self):
         try:
-            with open(self.__archivo_residentes, "r") as archivo:
+            with open(self.__archivo_residentes, "r",encoding='UTF-8') as archivo:
                 self.__listaResidentes = json.load(archivo)
         except:
             # Si el archivo no existe, se crea con un residente de ejemplo
-            self.__listaResidentes = {'12345': {'Nombre': 'Mario Prueba', 'Edad': 23, 'Fecha de nacimiento': '05/18/1999', 'Estado': {'Físico': 'Bien', 'Mental': 'mal'}}}
+            self.__listaResidentes = {'12345': {'Nombre': 'Mario Prueba', 'Edad': 23, 'Fecha de nacimiento': '05/18/1999','Contacto': {'Nombre': 'Sandra', 'Cedula': '654852', 'Telefono': '3220569874'}}}
             self.guardar_residentes(self.__listaResidentes)
 
     def guardar_residentes(self,list):
@@ -85,15 +94,16 @@ class BaseDatos:
         except:
             return False
         
-    def agregarResidente(self,nombre,cedula,edad,date):
+    def agregarResidente(self,nombre,cedula,edad,date,nombre2,cedula2,telefono):
         p=Residente()
         n = p.AsignarNombre(nombre)
         doc = p.AsignarCedula(cedula)
         age = p.AsignarEdad(edad)
         birthdate = p.AsignarFechanacimiento(date)
-        #estado = p.AsignarStatus(status)
-        self.__listaResidentes[doc] = {'Nombre': n, 'Edad': age , 'Fecha de nacimiento': birthdate}
-        print(self.__listaResidentes)
+        n_cont = p.AsignarNombre(nombre2)
+        c_cont = p.AsignarCedula(cedula2)
+        t_cont = p.AsignarTelefono(telefono)
+        self.__listaResidentes[doc] = {'Nombre': n, 'Edad': age , 'Fecha de nacimiento': birthdate, 'Contacto': {'Nombre': n_cont, 'Cedula': c_cont, 'Telefono': t_cont}}
         self.guardar_residentes(self.__listaResidentes)
     
     def VerDatos(self,cedula):
@@ -106,8 +116,10 @@ class BaseDatos:
                     Nombre: {residente['Nombre']}
                     Edad: {residente['Edad']}
                     Fecha de nacimiento: {residente['Fecha de nacimiento']}
-                    Estado físico: {residente['Estado']['Físico']}
-                    Estado mental: {residente['Estado']['Mental']}'''
+                    Datos contacto: 
+                    Nombre: {residente['Contacto']['Nombre']}
+                    Documento: {residente['Contacto']['Cedula']}
+                    Telefono: {residente['Contacto']['Telefono']}'''
                 return txt
             else:
                 return "No se encontró al residente con la cédula proporcionada."
@@ -129,3 +141,46 @@ class BaseDatos:
             return lista_residentes
         except FileNotFoundError:
             return "La base de datos de residentes no existe. Por favor, agregue residentes primero."
+    
+    def guardar_horario(self,list):
+        with open(self.__archivo_horarios, "w",encoding='UTF-8') as archivo:
+            json.dump(list, archivo)
+                
+    def asignarHorario(self,l,m,w,j,v,s,d):
+        p=Sistema()
+        lunes = p.AsignarLunes(l)
+        martes = p.AsignarMartes(m)
+        miercoles = p.AsignarMiercoles(w)
+        jueves = p.AsignarJueves(j)
+        viernes = p.AsignarViernes(v)
+        sabado = p.AsignarSabado(s)
+        domingo = p.AsignarDomingo(d)
+        self.__horarios = {'Lunes': lunes, 'Martes': martes, 'Miercoles': miercoles, 'Jueves': jueves, 'Viernes': viernes, 'Sabado': sabado, 'Domingo': domingo}
+        self.guardar_horario(self.__horarios)
+    
+    def verHorario(self,a):
+        with open(self.__archivo_horarios, "r",encoding='UTF-8') as archivo:
+                datos_horarios = json.load(archivo)
+        if a == 'L':
+            horario = datos_horarios.get('Lunes')
+            return horario
+        elif a == 'M':
+            horario = datos_horarios.get('Martes')
+            return horario
+        elif a == 'W':
+            horario = datos_horarios.get('Miercoles')
+            return horario
+        elif a == 'J':
+            horario = datos_horarios.get('Jueves')
+            return horario
+        elif a == 'V':
+            horario = datos_horarios.get('Viernes')
+            return horario
+        elif a == 'S':
+            horario = datos_horarios.get('Sabado')
+            return horario
+        elif a == 'D':
+            horario = datos_horarios.get('Domingo')
+            return horario
+        else:
+            return "No un horario establecido."

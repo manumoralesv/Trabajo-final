@@ -1,7 +1,9 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QMessageBox, QLineEdit, QDateTimeEdit
+import typing
+from PyQt5 import QtCore
+from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QMessageBox, QLineEdit, QDateTimeEdit, QWidget
 from PyQt5.uic import loadUi
 import sys 
-from modelo import BaseDatos , Residente
+from modelo import BaseDatos 
 
 class VentanaPrincipal(QMainWindow):
     def __init__(self, ppal =None):
@@ -64,6 +66,14 @@ class VentanaAdmin (QDialog):
             ventana=AgregarResidente(self)
             self.hide()
             ventana.show()
+        elif item == 'Crear Horario':
+            ventana=AgregarHorario(self)
+            self.hide()
+            ventana.show()
+        elif item == 'Ver Horario':
+            ventana=VistaHorario(self)
+            self.hide()
+            ventana.show()
         elif item == 'Actualizar Datos':
             ventana= ModificarResidente(self)
             self.hide()
@@ -119,18 +129,78 @@ class AgregarResidente (QDialog):
         self.cedula = self.doc.text()
         self.edad = self.age.text()
         self.f_nacimiento =  self.birthdate.date().toString('MM/dd/yyyy')
+        self.n_cont = self.name_cont.text()
+        self.c_cont = self.doc_cont.text()
+        self.t_cont = self.tel_cont.text()
         funcion = BaseDatos()
-        funcion.agregarResidente(self.nombre,self.cedula,self.edad,self.f_nacimiento)
-
+        funcion.agregarResidente(self.nombre,self.cedula,self.edad,self.f_nacimiento,self.n_cont,self.c_cont,self.t_cont)
+    
     def cerrar(self):
         self.close() 
         self.__ventanaPadre.show()
         
-class EstadoResidente(QDialog):
-    def __init__(self, ppal=None):
+class AgregarHorario(QDialog):
+    def __init__(self, ppal = None):
         super().__init__(ppal)
-        loadUi("interfaces/status.ui",self)
-
+        loadUi("interfaces/agg_horario.ui",self)
+        self.__ventanaPadre = ppal
+        self.setup()
+    
+    def setup(self):
+        #se programa la señal para el boton
+        self.boton_agghorario.accepted.connect(self.add_horario)
+        self.boton_agghorario.rejected.connect(self.cerrar)
+    
+    def add_horario(self):
+        self.lunes = self.esp_lunes.text()
+        self.martes = self.esp_martes.text()
+        self.miercoles = self.esp_miercoles.text()
+        self.jueves = self.esp_jueves.text()
+        self.viernes = self.esp_viernes.text()
+        self.sabado = self.esp_sabado.text()
+        self.domingo = self.esp_domingo.text()
+        funcion = BaseDatos()
+        funcion.asignarHorario(self.lunes,self.martes,self.miercoles,self.jueves,self.viernes,self.sabado,self.domingo)
+        self.cerrar()
+        
+    def cerrar(self):
+        self.close() 
+        self.__ventanaPadre.show()
+               
+class VistaHorario(QDialog):
+    def __init__(self, ppal = None):
+        super().__init__(ppal)
+        loadUi("interfaces/vista_horario.ui",self)
+        self.__ventanaPadre = ppal
+        self.setup()
+        
+    def setup(self):
+        #se programa la señal para el boton
+        self.see_horario()
+        self.boton_horario.clicked.connect(self.cerrar)
+    
+    def see_horario(self):
+        opcion = BaseDatos()
+        l = opcion.verHorario('L')
+        m = opcion.verHorario('M')
+        w = opcion.verHorario('W')
+        j = opcion.verHorario('J')
+        v = opcion.verHorario('V')
+        s = opcion.verHorario('S')
+        d = opcion.verHorario('D')
+        
+        self.label_lunes.setText(l)
+        self.label_martes.setText(m)
+        self.label_miercoles.setText(w)
+        self.label_jueves.setText(j)
+        self.label_viernes.setText(v)
+        self.label_sabado.setText(s)
+        self.label_domingo.setText(d)
+    
+    def cerrar(self):
+        self.close() 
+        self.__ventanaPadre.show()
+        
 class ModificarResidente(QDialog):
     def __init__(self, ppal=None):
         super().__init__(ppal)
@@ -147,8 +217,8 @@ class ModificarResidente(QDialog):
             ventana=DatosResidente(self)
             self.hide()
             ventana.show() 
-        elif item2 == 'Contacto 1':
-            ventana=DatosContacto1(self)
+        elif item2 == 'Contacto':
+            ventana=DatosContacto(self)
             self.hide()
             ventana.show()
             
@@ -157,10 +227,10 @@ class DatosResidente(QDialog):
         super().__init__(ppal)
         loadUi("interfaces/mod_residente.ui",self)
 
-class DatosContacto1(QDialog):
+class DatosContacto(QDialog):
     def __init__(self, ppal=None):
         super().__init__(ppal)
-        loadUi("interfaces/mod_contacto1.ui",self)
+        loadUi("interfaces/mod_contacto.ui",self)
 
 class EliminarResidente (QDialog):
     def __init__(self, ppal=None):
@@ -203,7 +273,7 @@ class VistaInvitado (QDialog):
     def __init__(self,cedula, ppal=None):
         super().__init__(ppal)
         loadUi("interfaces/vista_invitado.ui",self)
-        self.__VentanaPadre = ppal
+        self.__ventanaPadre = ppal
         self.cedula = cedula
         self.setup()
     
@@ -215,14 +285,7 @@ class VistaInvitado (QDialog):
     def vistaResidente(self):
         opcion2 = BaseDatos()
         info = opcion2.VerDatos(self.cedula)
-        if info == False:
-            msg = QMessageBox(self)
-            msg.setIcon(QMessageBox.Information)
-            msg.setWindowTitle("Resultado")
-            msg.setText("El documento ingresado no se encuentra en la base de datos")
-            msg.show()
-        else:
-            self.info_residente.setText(info)
+        self.info_residente.setText(info)
     
     
     
