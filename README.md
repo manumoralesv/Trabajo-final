@@ -8,3 +8,5 @@ La base de datos de este código se llevará a cabo de dos archivos JSON los que
 Diagrama de flujo:
 
 ![Alt text](<diagrama de flujo.png>)
+
+Integrante: Manuela Morales Villa - manuela.moralesv@udea.edu.co
