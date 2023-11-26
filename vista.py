@@ -296,7 +296,23 @@ class DatosContacto(QDialog):
 class EliminarResidente (QDialog):
     def __init__(self, ppal=None):
         super().__init__(ppal)
-        loadUi("interfaces/eliminar_residente.ui",self)     
+        loadUi("interfaces/eliminar_residente.ui",self) 
+        self.__ventanaPadre = ppal
+        self.setup()
+    
+    def setup(self):
+        #se programa la señal para el boton
+        self.boton_eliminar.accepted.connect(self.delete_res)
+        self.boton_eliminar.rejected.connect(self.cerrar)  
+    
+    def delete_res(self):
+        self.doc =  self.busc_delete.text()
+        funcion = BaseDatos()
+        funcion.deleteRes(self.doc)
+    
+    def cerrar(self):
+        self.close() 
+        self.__ventanaPadre.show()
         
 class VentanaInvitado (QDialog):
     def __init__(self,ppal=None):

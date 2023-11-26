@@ -52,7 +52,7 @@
     <string>Documento del residente a eliminar</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="busc_doc2">
+  <widget class="QLineEdit" name="busc_delete">
    <property name="geometry">
     <rect>
      <x>80</x>

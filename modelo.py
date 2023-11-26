@@ -83,7 +83,7 @@ class BaseDatos:
 
     def guardar_residentes(self,list):
         with open(self.__archivo_residentes, "w",encoding='UTF-8') as archivo:
-            json.dump(list, archivo)
+            json.dump(list, archivo,indent=2)
             
     def validarRec(self, cedula):
         try: 
@@ -144,7 +144,7 @@ class BaseDatos:
     
     def guardar_horario(self,list):
         with open(self.__archivo_horarios, "w",encoding='UTF-8') as archivo:
-            json.dump(list, archivo)
+            json.dump(list, archivo,indent=2)
                 
     def asignarHorario(self,l,m,w,j,v,s,d):
         p=Sistema()
@@ -157,10 +157,15 @@ class BaseDatos:
         domingo = p.AsignarDomingo(d)
         self.__horarios = {'Lunes': lunes, 'Martes': martes, 'Miercoles': miercoles, 'Jueves': jueves, 'Viernes': viernes, 'Sabado': sabado, 'Domingo': domingo}
         self.guardar_horario(self.__horarios)
-    
+        
     def verHorario(self,a):
-        with open(self.__archivo_horarios, "r",encoding='UTF-8') as archivo:
-                datos_horarios = json.load(archivo)
+        try:
+            with open(self.__archivo_horarios, "r",encoding='UTF-8') as archivo:
+                    datos_horarios = json.load(archivo)
+        except FileNotFoundError:
+            self.__horarios2 = {'Lunes': 'Vacio', 'Martes': 'Vacio', 'Miercoles': 'Vacio', 'Jueves': 'Vacio', 'Viernes': 'Vacio', 'Sabado': 'Vacio', 'Domingo': 'Vacio'}
+            self.guardar_horario(self.__horarios2)
+                        
         if a == 'L':
             horario = datos_horarios.get('Lunes')
             return horario
@@ -182,8 +187,6 @@ class BaseDatos:
         elif a == 'D':
             horario = datos_horarios.get('Domingo')
             return horario
-        else:
-            return "No un horario establecido."
     
     def modDatosRes(self,doc,nombre,edad, f_nacimiento):
         with open(self.__archivo_residentes, "r",encoding='UTF-8') as archivo:
@@ -193,7 +196,7 @@ class BaseDatos:
         datos_residentes[doc]['Edad'] = edad
         datos_residentes[doc]['Fecha de nacimiento'] = f_nacimiento
         with open(self.__archivo_residentes, "w",encoding='UTF-8') as archivo:
-                json.dump(datos_residentes, archivo)
+                json.dump(datos_residentes, archivo,indent=2)
                 archivo.close()
     
     def modDatosCont(self,doc,nombre,cedula, telefono):
@@ -204,5 +207,27 @@ class BaseDatos:
         datos_residentes[doc]['Contacto']['Cedula'] = cedula
         datos_residentes[doc]['Contacto']['Telefono'] = telefono
         with open(self.__archivo_residentes, "w",encoding='UTF-8') as archivo:
-                json.dump(datos_residentes, archivo)
+                json.dump(datos_residentes, archivo,indent=2)
                 archivo.close()        
+                
+    def deleteRes(self,doc):
+        with open(self.__archivo_residentes, "r",encoding='UTF-8') as archivo:
+                datos_residentes = json.load(archivo)
+                archivo.close()
+        print(datos_residentes)
+        
+        # Clave que deseas eliminar
+        clave_a_eliminar = doc
+
+        # Verificar si la clave existe antes de intentar eliminarla
+        if datos_residentes[clave_a_eliminar]:
+            # Eliminar la clave
+            del datos_residentes[clave_a_eliminar]
+            print(f"Se eliminó la clave '{clave_a_eliminar}'")
+            print(datos_residentes)
+
+            # Guardar los cambios en el archivo JSON
+            with open(self.__archivo_residentes, 'w') as file:
+                json.dump(datos_residentes, file, indent=2)
+        else:
+            print(f"La clave '{clave_a_eliminar}' no existe en el archivo JSON.")
