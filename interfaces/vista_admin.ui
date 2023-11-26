@@ -53,28 +53,24 @@
     <string>Salir</string>
    </property>
   </widget>
-  <widget class="QScrollArea" name="residentes_view">
+  <widget class="QLabel" name="resident_data">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>90</y>
+     <x>24</x>
+     <y>75</y>
      <width>451</width>
-     <height>211</height>
+     <height>221</height>
     </rect>
    </property>
-   <property name="widgetResizable">
-    <bool>true</bool>
+   <property name="font">
+    <font>
+     <family>Times New Roman</family>
+     <pointsize>10</pointsize>
+    </font>
    </property>
-   <widget class="QWidget" name="scrollAreaWidgetContents">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>449</width>
-      <height>209</height>
-     </rect>
-    </property>
-   </widget>
+   <property name="text">
+    <string/>
+   </property>
   </widget>
  </widget>
  <resources/>

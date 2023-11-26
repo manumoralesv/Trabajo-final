@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QMessageBox, QLineEdit, QComboBox
 from PyQt5.uic import loadUi
 import sys 
+from modelo import Residente
 
 class VentanaPrincipal(QMainWindow):
     def __init__(self, ppal =None):
@@ -16,10 +17,7 @@ class VentanaPrincipal(QMainWindow):
     def asignarControlador(self,control):
         #Se asigna el controlador
         self.__controlador = control
-    
-    def busc_res(self,a):
-        resultado =self.__controlador.recibirInfoRes(a)
-
+        
     def ingreso(self):
         #Función que nos servirá para llevar a cabo el funcionamiento del botón de ingreso
         self.edit_password = QLineEdit(self)
@@ -78,6 +76,14 @@ class VistaResidente (QDialog):
     def __init__(self, ppal=None):
         super().__init__(ppal)
         loadUi("interfaces/vista_admin.ui",self)
+        self.__VentanaPadre = ppal
+        self.verDatos()
+    
+    def verDatos(self):
+        opcion3 = Residente()
+        info2 = opcion3.seeAllData()
+        self.resident_data.setText(info2)
+    
 
 class AgregarResidente (QDialog):
     def __init__(self, ppal=None):
@@ -142,7 +148,7 @@ class VentanaInvitado (QDialog):
     def __init__(self,ppal=None):
         super().__init__(ppal)
         loadUi("interfaces/menu_invitado.ui",self)
-        self.__ventanaPadre = ppal
+        self.__VentanaPadre = ppal
         self.setup()
     
     def setup(self):
@@ -152,42 +158,38 @@ class VentanaInvitado (QDialog):
     
     def buscar_Residente(self):
         self.cedula = self.busc_invitado.text()
-        resultado =self.__ventanaPadre.busc_res(self.cedula)
-        if resultado== False:
-            mensaje = "Paciente No existe, intente de nuevo"
-        else:
+        opcion = Residente()
+        opcion.validarRec(self.cedula)
+        if opcion:
             # Al encontrar el residente, se procede a abrir la ventana donde se visualiza la informacion.
-            ventana_In = VistaInvitado(self)
+            ventana_In = VistaInvitado(self.cedula)
             self.hide()
             ventana_In.show()
-
-        msj= QMessageBox(self)
-        msj.setIcon(QMessageBox.Warning) #Information
-        msj.setText(mensaje)
-        msj.show()
+        else:
+            mensaje = "El residente no se encuentra en la base de datos, intente de nuevo"
+            msj= QMessageBox(self)
+            msj.setIcon(QMessageBox.Warning) 
+            msj.setText(mensaje)
+            msj.show()
                 
 class VistaInvitado (QDialog):
-    def __init__(self, ppal=None):
+    def __init__(self,cedula, ppal=None):
         super().__init__(ppal)
         loadUi("interfaces/vista_invitado.ui",self)
+        self.__VentanaPadre = ppal
+        self.cedula = cedula
         self.setup()
     
     def setup(self):
         #se programa la señal para el boton
+        self.vistaResidente()
         self.botonvista_invitado.clicked.connect(lambda:self.close())
-        
-    def visual_DatosResidente(self,name,doc,age,visit,salud_mental):
-        #Sacamos la información y creamos el label
-        self.__name= name
-        self.__doc= doc
-        self.__age= age
-        self.__visit = visit
-        self.__salud_mental= salud_mental
-        self.info_residente.setText(f'''
-                                   Nombre: {name}
-                                   Id: {doc}
-                                   Edad: {age}
-                                   Visitas: {visit}
-                                   Descripción de la salud mental: {salud_mental}''')
+    
+    def vistaResidente(self):
+        opcion2 = Residente()
+        info = opcion2.VerDatos(self.cedula)
+        self.info_residente.setText(info)
+    
+    
     
     
