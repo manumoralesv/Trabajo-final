@@ -64,11 +64,6 @@
      <string>Contacto 1</string>
     </property>
    </item>
-   <item>
-    <property name="text">
-     <string>Contacto 2</string>
-    </property>
-   </item>
   </widget>
   <widget class="QLabel" name="label">
    <property name="geometry">

@@ -151,10 +151,6 @@ class ModificarResidente(QDialog):
             ventana=DatosContacto1(self)
             self.hide()
             ventana.show()
-        elif item2 == 'Contacto 2':
-            ventana=DatosContacto2(self)
-            self.hide()
-            ventana.show()
             
 class DatosResidente(QDialog):
     def __init__(self, ppal=None):
@@ -165,11 +161,6 @@ class DatosContacto1(QDialog):
     def __init__(self, ppal=None):
         super().__init__(ppal)
         loadUi("interfaces/mod_contacto1.ui",self)
-
-class DatosContacto2(QDialog):
-    def __init__(self, ppal=None):
-        super().__init__(ppal)
-        loadUi("interfaces/mod_contacto2.ui",self)
 
 class EliminarResidente (QDialog):
     def __init__(self, ppal=None):
