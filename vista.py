@@ -1,7 +1,7 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QMessageBox, QLineEdit, QComboBox
+from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QMessageBox, QLineEdit, QDateTimeEdit
 from PyQt5.uic import loadUi
 import sys 
-from modelo import Residente
+from modelo import BaseDatos , Residente
 
 class VentanaPrincipal(QMainWindow):
     def __init__(self, ppal =None):
@@ -47,11 +47,12 @@ class VentanaAdmin (QDialog):
     def __init__(self,ppal=None):
         super().__init__(ppal)
         loadUi("interfaces/menu_admin.ui",self)
+        self.__ventanaPadre = ppal
         self.menu()
         
     def menu(self):
         self.boton_menuadmin.accepted.connect(self.opcion)
-        self.boton_menuadmin.rejected.connect(lambda:self.close())
+        self.boton_menuadmin.rejected.connect(self.cerrar)
     
     def opcion(self):
         item = self.menu_admin.currentText()
@@ -71,32 +72,64 @@ class VentanaAdmin (QDialog):
             ventana=EliminarResidente(self)
             self.hide()
             ventana.show()
+            
+    def cerrar(self):
+        self.close() 
+        self.__ventanaPadre.show()
 
 class VistaResidente (QDialog):
     def __init__(self, ppal=None):
         super().__init__(ppal)
         loadUi("interfaces/vista_admin.ui",self)
-        self.__VentanaPadre = ppal
-        self.verDatos()
+        self.__ventanaPadre = ppal
+        self.menu()
     
+    def menu(self):
+        self.resident_data.setText(self.verDatos())
+        self.botonvista_admin.clicked.connect(self.cerrar)
+        
     def verDatos(self):
-        opcion3 = Residente()
+        opcion3 = BaseDatos()
         info2 = opcion3.seeAllData()
-        self.resident_data.setText(info2)
+        print(info2)
+        info = ''
+        for i in info2:
+            data = i
+            info += data + '\n'
+            print(info)
+        return info
     
-
+    def cerrar(self):
+        self.close() 
+        self.__ventanaPadre.show()
+    
 class AgregarResidente (QDialog):
     def __init__(self, ppal=None):
         super().__init__(ppal)
         loadUi("interfaces/agregar_residente.ui",self)
         self.__ventanaPadre = ppal
-
+        self.setup()
+        
+    def setup(self):
+        self.boton_agregar.accepted.connect(self.enviarInfo)
+        self.boton_agregar.rejected.connect(self.cerrar)
+        
     def enviarInfo(self):
-        nombre=self.mod_name.text()
-        cedula=self.mod_cedula.text()
-        edad= self.mod_age.text()
-        self.__ventanaPadre.recibir_infoRec(nombre,cedula,edad)
+        self.nombre = self.name.text()
+        self.cedula = self.doc.text()
+        self.edad = self.age.text()
+        self.f_nacimiento =  self.birthdate.date().toString('MM/dd/yyyy')
+        funcion = BaseDatos()
+        funcion.agregarResidente(self.nombre,self.cedula,self.edad,self.f_nacimiento)
+
+    def cerrar(self):
+        self.close() 
         self.__ventanaPadre.show()
+        
+class EstadoResidente(QDialog):
+    def __init__(self, ppal=None):
+        super().__init__(ppal)
+        loadUi("interfaces/status.ui",self)
 
 class ModificarResidente(QDialog):
     def __init__(self, ppal=None):
@@ -109,7 +142,6 @@ class ModificarResidente(QDialog):
         self.boton_modificar.rejected.connect(lambda:self.close())
     
     def eleccion(self):
-        
         item2 = self.menu_modificacion.currentText()
         if item2 == 'Residente':
             ventana=DatosResidente(self)
@@ -148,17 +180,17 @@ class VentanaInvitado (QDialog):
     def __init__(self,ppal=None):
         super().__init__(ppal)
         loadUi("interfaces/menu_invitado.ui",self)
-        self.__VentanaPadre = ppal
+        self.__ventanaPadre = ppal
         self.setup()
     
     def setup(self):
         #se programa la señal para el boton
         self.boton_invitado.accepted.connect(self.buscar_Residente)
-        self.boton_invitado.rejected.connect(lambda:self.close())
+        self.boton_invitado.rejected.connect(self.cerrar)
     
     def buscar_Residente(self):
         self.cedula = self.busc_invitado.text()
-        opcion = Residente()
+        opcion = BaseDatos()
         opcion.validarRec(self.cedula)
         if opcion:
             # Al encontrar el residente, se procede a abrir la ventana donde se visualiza la informacion.
@@ -171,7 +203,11 @@ class VentanaInvitado (QDialog):
             msj.setIcon(QMessageBox.Warning) 
             msj.setText(mensaje)
             msj.show()
-                
+    
+    def cerrar(self):
+        self.close() 
+        self.__ventanaPadre.show()
+        
 class VistaInvitado (QDialog):
     def __init__(self,cedula, ppal=None):
         super().__init__(ppal)
@@ -186,9 +222,16 @@ class VistaInvitado (QDialog):
         self.botonvista_invitado.clicked.connect(lambda:self.close())
     
     def vistaResidente(self):
-        opcion2 = Residente()
+        opcion2 = BaseDatos()
         info = opcion2.VerDatos(self.cedula)
-        self.info_residente.setText(info)
+        if info == False:
+            msg = QMessageBox(self)
+            msg.setIcon(QMessageBox.Information)
+            msg.setWindowTitle("Resultado")
+            msg.setText("El documento ingresado no se encuentra en la base de datos")
+            msg.show()
+        else:
+            self.info_residente.setText(info)
     
     
     
