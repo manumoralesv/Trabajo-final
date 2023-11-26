@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QDialogButtonBox" name="mod_cont1">
+  <widget class="QDialogButtonBox" name="mod_cont">
    <property name="geometry">
     <rect>
      <x>230</x>
@@ -29,9 +29,9 @@
   <widget class="QLabel" name="label_15">
    <property name="geometry">
     <rect>
-     <x>170</x>
+     <x>200</x>
      <y>40</y>
-     <width>271</width>
+     <width>231</width>
      <height>51</height>
     </rect>
    </property>
@@ -45,7 +45,7 @@
     </font>
    </property>
    <property name="text">
-    <string>Datos contacto 1</string>
+    <string>Datos contacto</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_5">
@@ -87,7 +87,7 @@
     <string>Nombre completo:</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="doc_cont1">
+  <widget class="QLineEdit" name="doc_cont">
    <property name="geometry">
     <rect>
      <x>210</x>
@@ -100,7 +100,7 @@
     <string/>
    </property>
   </widget>
-  <widget class="QLineEdit" name="tel_cont1">
+  <widget class="QLineEdit" name="tel_cont">
    <property name="geometry">
     <rect>
      <x>210</x>
@@ -131,7 +131,7 @@
     <string>Documento de identidad:</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="name_cont1">
+  <widget class="QLineEdit" name="name_cont">
    <property name="geometry">
     <rect>
      <x>210</x>

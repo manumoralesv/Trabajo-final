@@ -184,3 +184,25 @@ class BaseDatos:
             return horario
         else:
             return "No un horario establecido."
+    
+    def modDatosRes(self,doc,nombre,edad, f_nacimiento):
+        with open(self.__archivo_residentes, "r",encoding='UTF-8') as archivo:
+                datos_residentes = json.load(archivo)
+                archivo.close()
+        datos_residentes[doc]['Nombre'] = nombre
+        datos_residentes[doc]['Edad'] = edad
+        datos_residentes[doc]['Fecha de nacimiento'] = f_nacimiento
+        with open(self.__archivo_residentes, "w",encoding='UTF-8') as archivo:
+                json.dump(datos_residentes, archivo)
+                archivo.close()
+    
+    def modDatosCont(self,doc,nombre,cedula, telefono):
+        with open(self.__archivo_residentes, "r",encoding='UTF-8') as archivo:
+                datos_residentes = json.load(archivo)
+                archivo.close()
+        datos_residentes[doc]['Contacto']['Nombre'] = nombre
+        datos_residentes[doc]['Contacto']['Cedula'] = cedula
+        datos_residentes[doc]['Contacto']['Telefono'] = telefono
+        with open(self.__archivo_residentes, "w",encoding='UTF-8') as archivo:
+                json.dump(datos_residentes, archivo)
+                archivo.close()        

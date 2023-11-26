@@ -75,7 +75,7 @@ class VentanaAdmin (QDialog):
             self.hide()
             ventana.show()
         elif item == 'Actualizar Datos':
-            ventana= ModificarResidente(self)
+            ventana= VentanaModificar(self)
             self.hide()
             ventana.show()
         elif item == 'Eliminar Residente':
@@ -200,11 +200,44 @@ class VistaHorario(QDialog):
     def cerrar(self):
         self.close() 
         self.__ventanaPadre.show()
-        
+
+class VentanaModificar(QDialog):
+    def __init__(self,ppal=None):
+        super().__init__(ppal)
+        loadUi("interfaces/busc_mod.ui",self)
+        self.__ventanaPadre = ppal
+        self.setup()
+    
+    def setup(self):
+        #se programa la señal para el boton
+        self.boton_buscmod.accepted.connect(self.buscar_Residente)
+        self.boton_buscmod.rejected.connect(self.cerrar)
+    
+    def buscar_Residente(self):
+        self.cedula = self.busc_resmod.text()
+        opcion = BaseDatos()
+        opcion.validarRec(self.cedula)
+        if opcion:
+            # Al encontrar el residente, se procede a abrir la ventana donde se visualiza la informacion.
+            ventana_mod = ModificarResidente(self.cedula)
+            self.hide()
+            ventana_mod.show()
+        else:
+            mensaje = "El residente no se encuentra en la base de datos, intente de nuevo"
+            msj= QMessageBox(self)
+            msj.setIcon(QMessageBox.Warning) 
+            msj.setText(mensaje)
+            msj.show()
+    
+    def cerrar(self):
+        self.close() 
+        self.__ventanaPadre.show()
+                
 class ModificarResidente(QDialog):
-    def __init__(self, ppal=None):
+    def __init__(self,doc, ppal=None):
         super().__init__(ppal)
         loadUi("interfaces/modificar_residente.ui",self)
+        self.doc = doc
         self.menu2()
         
     def menu2(self):
@@ -212,25 +245,53 @@ class ModificarResidente(QDialog):
         self.boton_modificar.rejected.connect(lambda:self.close())
     
     def eleccion(self):
-        item2 = self.menu_modificacion.currentText()
-        if item2 == 'Residente':
-            ventana=DatosResidente(self)
+        item3 = self.menu_modificacion.currentText()
+        if item3 == 'Residente':
+            ventana1=DatosResidente(self.doc)
             self.hide()
-            ventana.show() 
-        elif item2 == 'Contacto':
-            ventana=DatosContacto(self)
+            ventana1.show() 
+        elif item3 == 'Contacto':
+            ventana1=DatosContacto(self.doc)
             self.hide()
-            ventana.show()
+            ventana1.show()
             
 class DatosResidente(QDialog):
-    def __init__(self, ppal=None):
+    def __init__(self,doc, ppal=None):
         super().__init__(ppal)
         loadUi("interfaces/mod_residente.ui",self)
-
+        self.doc = doc
+        self.setup()
+    
+    def setup(self):
+        #se programa la señal para el boton
+        self.mod_residente.accepted.connect(self.mod_datares)
+        self.mod_residente.rejected.connect(lambda:self.close())
+    
+    def mod_datares(self):
+        self.newname = self.mod_name.text()
+        self.newage = self.mod_age.text()
+        self.newdate = self.mod_birthdate.date().toString('MM/dd/yyyy')
+        funcion = BaseDatos()
+        funcion.modDatosRes(self.doc,self.newname,self.newage,self.newdate)
+        
 class DatosContacto(QDialog):
-    def __init__(self, ppal=None):
+    def __init__(self,doc, ppal=None):
         super().__init__(ppal)
         loadUi("interfaces/mod_contacto.ui",self)
+        self.doc = doc
+        self.setup()
+    
+    def setup(self):
+        #se programa la señal para el boton
+        self.mod_cont.accepted.connect(self.mod_datacont)
+        self.mod_cont.rejected.connect(lambda:self.close())
+    
+    def mod_datacont(self):
+        self.newname2 = self.name_cont.text()
+        self.newdoc2 = self.doc_cont.text()
+        self.newtel2 = self.tel_cont.text()
+        funcion = BaseDatos()
+        funcion.modDatosCont(self.doc,self.newname2,self.newdoc2,self.newtel2)
 
 class EliminarResidente (QDialog):
     def __init__(self, ppal=None):
