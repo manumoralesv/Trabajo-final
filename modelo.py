@@ -157,15 +157,18 @@ class BaseDatos:
         domingo = p.AsignarDomingo(d)
         self.__horarios = {'Lunes': lunes, 'Martes': martes, 'Miercoles': miercoles, 'Jueves': jueves, 'Viernes': viernes, 'Sabado': sabado, 'Domingo': domingo}
         self.guardar_horario(self.__horarios)
-        
-    def verHorario(self,a):
+    
+    def cargar_horario(self):
         try:
             with open(self.__archivo_horarios, "r",encoding='UTF-8') as archivo:
                     datos_horarios = json.load(archivo)
         except FileNotFoundError:
-            self.__horarios2 = {'Lunes': 'Vacio', 'Martes': 'Vacio', 'Miercoles': 'Vacio', 'Jueves': 'Vacio', 'Viernes': 'Vacio', 'Sabado': 'Vacio', 'Domingo': 'Vacio'}
-            self.guardar_horario(self.__horarios2)
-                        
+            datos_horarios = {'Lunes': 'Vacio', 'Martes': 'Vacio', 'Miercoles': 'Vacio', 'Jueves': 'Vacio', 'Viernes': 'Vacio', 'Sabado': 'Vacio', 'Domingo': 'Vacio'}
+            self.guardar_horario(datos_horarios)
+        return datos_horarios
+    
+    def verHorario(self,a):
+        datos_horarios = self.cargar_horario()              
         if a == 'L':
             horario = datos_horarios.get('Lunes')
             return horario
@@ -214,7 +217,6 @@ class BaseDatos:
         with open(self.__archivo_residentes, "r",encoding='UTF-8') as archivo:
                 datos_residentes = json.load(archivo)
                 archivo.close()
-        print(datos_residentes)
         
         # Clave que deseas eliminar
         clave_a_eliminar = doc
@@ -224,7 +226,6 @@ class BaseDatos:
             # Eliminar la clave
             del datos_residentes[clave_a_eliminar]
             print(f"Se eliminó la clave '{clave_a_eliminar}'")
-            print(datos_residentes)
 
             # Guardar los cambios en el archivo JSON
             with open(self.__archivo_residentes, 'w') as file:

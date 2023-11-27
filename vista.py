@@ -309,6 +309,7 @@ class EliminarResidente (QDialog):
         self.doc =  self.busc_delete.text()
         funcion = BaseDatos()
         funcion.deleteRes(self.doc)
+        self.close()
     
     def cerrar(self):
         self.close() 
