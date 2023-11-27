@@ -101,12 +101,10 @@ class VistaResidente (QDialog):
     def verDatos(self):
         opcion3 = BaseDatos()
         info2 = opcion3.seeAllData()
-        print(info2)
         info = ''
         for i in info2:
             data = i
             info += data + '\n'
-            print(info)
         return info
     
     def cerrar(self):
